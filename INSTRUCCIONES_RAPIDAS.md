@@ -1,53 +1,106 @@
-# Instrucciones Rapidas - Ejecuta Todo En 3 Pasos
+# 🚀 Instrucciones Rápidas - Genera Tu Catálogo en 3 Pasos
 
-## Paso 1: Abre Terminal (CMD o PowerShell)
+## Resumen
+Este proyecto crea catálogos automáticos en **3 formatos diferentes** desde tu archivo Excel:
+- 📄 **PDF Profesional** - Para imprimir o enviar
+- - 📋 **Excel Formateado** - Para compartir con clientes
+  - - 🖥️ **HTML Interactivo** - Para publicar en web o email
+   
+    - ---
 
-En Windows:
-- Click derecho en la carpeta del proyecto
-- - Selecciona "Abrir terminal aqui" o "Abrir PowerShell aqui"
- 
-  - ## Paso 2: Instala Dependencias (UNA SOLA VEZ)
- 
-  - Escribe esto en la terminal:
-  - ```
-    pip install -r requirements.txt
-    ```
+    ## Paso 1: Preparar Tu Archivo Excel
 
-    Espera a que termine (toma 1-2 minutos)
+    ### Requisitos:
+    Tu archivo Excel debe tener EXACTAMENTE estas columnas:
 
-    ## Paso 3: Ejecuta el Script
+    | Column | Ejemplo |
+    |--------|----------|
+    | **Item** | 123625, 179904, 191554 |
+    | **Pack** | 1, 2, 3 |
+    | **Size** | EMPTY, #VAR, 200CT |
+    | **Descripción** | BUTTER YOGURT, TURKEY BREAST, KRAFT BAG |
 
-    Escribe esto:
-    ```
-    python scripts/generar_catalogos.py
-    ```
-
-    ¡LISTO!
-
-    Los catalogos se crean en la carpeta "output/"
-
-    ---
-
-    ## Si Quieres Procesar TU Excel
-
-    1. Coloca tu archivo en: carpeta/datos/
-    2. 2. Llamalo: productos.xlsx
-       3. 3. Que tenga estas columnas: Nombre | Precio | Descripcion
-          4. 4. Ejecuta: python scripts/generar_catalogos.py
+    ### Acción:
+    1. Abre tu archivo Excel con tus productos
+    2. 2. Asegúrate de tener exactamente esas 4 columnas
+       3. 3. Guarda el archivo como **`productos.xlsx`**
+          4. 4. Coloca el archivo en la carpeta **`datos/`** del proyecto
             
              5. ---
             
-             6. ## Problemas?
+             6. ## Paso 2: Instalar Dependencias (Una Sola Vez)
             
-             7. - Error "python no encontrado": Instala Python desde python.org
-                - - Error "requirements": Asegurate de estar en la carpeta correcta
-                  - - Error al leer Excel: Verifica que el archivo se llame productos.xlsx
-                   
-                    - ---
+             7. 1. Abre **PowerShell** en la carpeta del proyecto
+                2.    - Haz click derecho en la carpeta → "Open PowerShell here"
+                  
+                      -    2. Ejecuta este comando:
+                           3.    ```
+                                    pip install -r requirements.txt
+                                    ```
 
-                    ## Archivos Importantes
+                                 3. Espera a que termine (2-3 minutos)
+                             
+                                 4. ---
+                             
+                                 5. ## Paso 3: Genera Tu Catálogo
+                             
+                                 6. ### Opción A: Catálogo PDF
+                                 7. En PowerShell, escribe:
+                                 8. ```
+                                    python scripts/generar_catalogos.py
+                                    ```
 
-                    - datos/productos_ejemplo.xlsx -> Excel de ejemplo
-                    - - scripts/generar_catalogos.py -> Script principal
-                      - - output/ -> Donde se guardan los documentos
-                        - 
+                                    Crea: `output/Catalogo_Productos_DD_MM_YYYY.pdf`
+
+                                    ### Opción B: Catálogo Excel
+                                    En PowerShell, escribe:
+                                    ```
+                                    python scripts/generar_excel.py
+                                    ```
+
+                                    Crea: `output/Catalogo_Productos_DD_MM_YYYY.xlsx`
+
+                                    ### Opción C: Catálogo HTML (Con Búsqueda)
+                                    En PowerShell, escribe:
+                                    ```
+                                    python scripts/generar_word_avanzado.py
+                                    ```
+
+                                    Crea: `output/Catalogo_Productos.html` - «BreAbre en navegador o comparte por email!
+
+                                    ---
+
+                                    ## ✅ ¡Listo!
+
+                                    Tus archivos están en la carpeta `output/`:
+                                    - Puedes descargarlos
+                                    - - Compartirlos con clientes
+                                      - - Subirlos a tu sitio web
+                                        - - Imprimirlos (PDF)
+                                         
+                                          - ---
+
+                                          ## 🔠 Reutilizar Con Nuevos Productos
+
+                                          Para generar nuevos catálogos:
+                                          1. Reemplaza `datos/productos.xlsx` con tu nuevo archivo
+                                          2. 2. Ejecuta el mismo comando
+                                             3. 3. ¡Listo! Tu nuevo catálogo se genera en segundos
+                                               
+                                                4. ---
+                                               
+                                                5. ## 🚧 Troubleshooting
+                                               
+                                                6. **Problema:** "No se encuentra productos.xlsx"
+                                                7. - **Solución:** Verifica que tu archivo se llama exactamente `productos.xlsx` y está en la carpeta `datos/`
+                                                  
+                                                   - **Problema:** "Columnas faltantes"
+                                                   - - **Solución:** Asegúrate de que tu Excel tiene exactamente estas 4 columnas: Item, Pack, Size, Descripción
+                                                    
+                                                     - **Problema:** "ModuleNotFoundError"
+                                                     - - **Solución:** Ejecuta `pip install -r requirements.txt` nuevamente
+                                                      
+                                                       - ---
+
+                                                       ## 📚 Para Más Detalles
+                                                       Ver `GUIA_COMPLETA.md`
