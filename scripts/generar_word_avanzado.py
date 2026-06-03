@@ -1,91 +1,108 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Generador Word Avanzado
-Crea documentos profesionales con estilos y formatos
+Generador de Catálogo HTML Digital
 """
 
 import os
-from docx import Document
-from docx.shared import Inches, Pt, RGBColor
-from docx.enum.text import WD_ALIGN_PARAGRAPH
 import pandas as pd
+from datetime import datetime
 
-def generar_word_avanzado():
-    """
-        Genera documentos Word con estilos profesionales
-            """
-                print("=" * 60)
-                    print("Generador Word Avanzado - Documentos Profesionales")
-                        print("=" * 60)
+def generar_catalogo_html(archivo_entrada='datos/productos.xlsx'):
+        if not os.path.exists(archivo_entrada):
+                    print(f"Error: No se encuentra {archivo_entrada}")
+                    return
 
-                                archivo_datos = 'datos/productos.xlsx'
+        datos = pd.read_excel(archivo_entrada)
+        columnas_requeridas = ['Item', 'Pack', 'Size', 'Descripción']
+        columnas_faltantes = [col for col in columnas_requeridas if col not in datos.columns]
 
-                                        if not os.path.exists(archivo_datos):
-                                                print(f"Error: No se encontro {archivo_datos}")
-                                                        print("Copia tu archivo Excel a datos/productos.xlsx")
-                                                                return
+    if columnas_faltantes:
+                print(f"Error: Columnas faltantes: {columnas_faltantes}")
+                return
 
-                                                                        print(f"\nLeyendo {archivo_datos}...")
-                                                                            datos = pd.read_excel(archivo_datos)
-                                                                                os.makedirs('output', exist_ok=True)
+    os.makedirs('output', exist_ok=True)
+    fecha = datetime.now().strftime("%d/%m/%Y %H:%M")
+    nombre_html = f"output/Catalogo_Productos.html"
 
-                                                                                        for idx, row in datos.iterrows():
-                                                                                                doc = Document()
-                                                                                                        
-                                                                                                                # Titulo principal
-                                                                                                                        titulo = doc.add_heading(f"Catalogo #{idx+1}", level=0)
-                                                                                                                                titulo.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                                                                                                                                        titulo_format = titulo.runs[0]
-                                                                                                                                                titulo_format.font.color.rgb = RGBColor(31, 78, 121)
-                                                                                                                                                        titulo_format.font.size = Pt(24)
-                                                                                                                                                                titulo_format.font.bold = True
-                                                                                                                                                                        
-                                                                                                                                                                                # Linea separadora
-                                                                                                                                                                                        doc.add_paragraph("" + "-" * 50)
-                                                                                                                                                                                                
-                                                                                                                                                                                                        # Nombre del producto
-                                                                                                                                                                                                                nombre_p = doc.add_paragraph()
-                                                                                                                                                                                                                        nombre_r = nombre_p.add_run(f"Producto: ")
-                                                                                                                                                                                                                                nombre_r.font.bold = True
-                                                                                                                                                                                                                                        nombre_r.font.size = Pt(12)
-                                                                                                                                                                                                                                                nombre_p.add_run(str(row.get('Nombre', 'N/A')))
-                                                                                                                                                                                                                                                        
-                                                                                                                                                                                                                                                                # Precio
-                                                                                                                                                                                                                                                                        precio_p = doc.add_paragraph()
-                                                                                                                                                                                                                                                                                precio_r = precio_p.add_run(f"Precio: ")
-                                                                                                                                                                                                                                                                                        precio_r.font.bold = True
-                                                                                                                                                                                                                                                                                                precio_r.font.size = Pt(12)
-                                                                                                                                                                                                                                                                                                        precio_val = precio_p.add_run(f"${row.get('Precio', 'N/A')}")
-                                                                                                                                                                                                                                                                                                                precio_val.font.color.rgb = RGBColor(0, 176, 80)
-                                                                                                                                                                                                                                                                                                                        precio_val.font.bold = True
-                                                                                                                                                                                                                                                                                                                                
-                                                                                                                                                                                                                                                                                                                                        # Descripcion
-                                                                                                                                                                                                                                                                                                                                                desc_p = doc.add_paragraph()
-                                                                                                                                                                                                                                                                                                                                                        desc_r = desc_p.add_run(f"Descripcion: ")
-                                                                                                                                                                                                                                                                                                                                                                desc_r.font.bold = True
-                                                                                                                                                                                                                                                                                                                                                                        desc_r.font.size = Pt(12)
-                                                                                                                                                                                                                                                                                                                                                                                desc_p.add_run(str(row.get('Descripcion', 'N/A')))
-                                                                                                                                                                                                                                                                                                                                                                                        
-                                                                                                                                                                                                                                                                                                                                                                                                # Pie de pagina
-                                                                                                                                                                                                                                                                                                                                                                                                        doc.add_paragraph()
-                                                                                                                                                                                                                                                                                                                                                                                                                footer = doc.add_paragraph("Documento generado automaticamente")
-                                                                                                                                                                                                                                                                                                                                                                                                                        footer.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                                                                                                                                                                                                                                                                                                                                                                                                                                footer_run = footer.runs[0]
-                                                                                                                                                                                                                                                                                                                                                                                                                                        footer_run.font.size = Pt(9)
-                                                                                                                                                                                                                                                                                                                                                                                                                                                footer_run.font.italic = True
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        footer_run.font.color.rgb = RGBColor(128, 128, 128)
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                        # Guardar
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                nombre_salida = f"output/catalogo_avanzado_{idx+1:04d}.docx"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        doc.save(nombre_salida)
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                print(f"✓ Creado: {nombre_salida}")
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        print(f"\n" + "=" * 60)
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            print(f"Listo! Se crearon {len(datos)} catalogos profesionales")
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                print(f"Ubicacion: carpeta output/")
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    print("=" * 60 + "\n")
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    if __name__ == '__main__':
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        generar_word_avanzado()
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+    html_content = f"""
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Catálogo de Productos</title>
+                    <style>
+                            * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+                                    body {{ font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }}
+                                            .container {{ max-width: 1200px; margin: 0 auto; background: white; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.1); padding: 40px; }}
+                                                    h1 {{ color: #1f4788; margin-bottom: 10px; }}
+                                                            .info {{ color: #666; margin-bottom: 30px; }}
+                                                                    .search {{ margin-bottom: 20px; }}
+                                                                            .search input {{ width: 100%; padding: 10px; font-size: 1em; border: 2px solid #ddd; border-radius: 5px; }}
+                                                                                    table {{ width: 100%; border-collapse: collapse; }}
+                                                                                            th {{ background-color: #1f4788; color: white; padding: 12px; text-align: left; }}
+                                                                                                    td {{ padding: 10px; border-bottom: 1px solid #ddd; }}
+                                                                                                            tr:nth-child(even) {{ background-color: #f9f9f9; }}
+                                                                                                                    tr:hover {{ background-color: #f0f0f0; }}
+                                                                                                                            .footer {{ margin-top: 30px; text-align: center; color: #666; border-top: 2px solid #eee; padding-top: 20px; }}
+                                                                                                                                </style>
+                                                                                                                                </head>
+                                                                                                                                <body>
+                                                                                                                                    <div class="container">
+                                                                                                                                            <h1>📒 Catálogo de Productos</h1>
+                                                                                                                                                    <div class="info">Actualizado: {fecha} | Total de productos: {len(datos)}</div>
+                                                                                                                                                            <div class="search">
+                                                                                                                                                                        <input type="text" id="searchInput" placeholder="Buscar productos...">
+                                                                                                                                                                                </div>
+                                                                                                                                                                                        <table id="productTable">
+                                                                                                                                                                                                    <thead>
+                                                                                                                                                                                                                    <tr>
+                                                                                                                                                                                                                                        <th>Item</th>
+                                                                                                                                                                                                                                                            <th>Pack</th>
+                                                                                                                                                                                                                                                                                <th>Size</th>
+                                                                                                                                                                                                                                                                                                    <th>Descripción</th>
+                                                                                                                                                                                                                                                                                                                    </tr>
+                                                                                                                                                                                                                                                                                                                                </thead>
+                                                                                                                                                                                                                                                                                                                                            <tbody>
+                                                                                                                                                                                                                                                                                                                                            """
+
+    print(f"Procesando {len(datos)} productos...")
+    for idx, row in datos.iterrows():
+                item = str(row.get('Item', 'N/A'))
+                pack = str(row.get('Pack', 'N/A'))
+                size = str(row.get('Size', 'N/A'))
+                desc = str(row.get('Descripción', 'N/A'))
+                html_content += f"<tr><td>{item}</td><td>{pack}</td><td>{size}</td><td>{desc}</td></tr>\n"
+
+    html_content += """
+                </tbody>
+                        </table>
+                                <div class="footer">
+                                            <p>Catálogo generado automáticamente - Usa el buscador para filtrar productos</p>
+                                                    </div>
+                                                        </div>
+                                                            <script>
+                                                                    document.getElementById('searchInput').addEventListener('keyup', function(e) {
+                                                                                const searchTerm = e.target.value.toLowerCase();
+                                                                                            const tableRows = document.querySelectorAll('#productTable tbody tr');
+                                                                                                        tableRows.forEach(row => {
+                                                                                                                        const text = row.textContent.toLowerCase();
+                                                                                                                                        row.style.display = text.includes(searchTerm) ? '' : 'none';
+                                                                                                                                                    });
+                                                                                                                                                            });
+                                                                                                                                                                </script>
+                                                                                                                                                                </body>
+                                                                                                                                                                </html>
+                                                                                                                                                                    """
+
+    print("Generando HTML...")
+    with open(nombre_html, 'w', encoding='utf-8') as f:
+                f.write(html_content)
+
+    print(f"\n✅ ¡Catálogo HTML generado!")
+    print(f"📄 Archivo: {nombre_html}")
+    print(f"📊 Productos: {len(datos)}")
+
+if __name__ == '__main__':
+        generar_catalogo_html()
